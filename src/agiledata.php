@@ -1,3 +1,5 @@
-<?php return [
-	'connection' => 'default',
+<?php
+
+return [
+    'connection' => 'default',
 ];

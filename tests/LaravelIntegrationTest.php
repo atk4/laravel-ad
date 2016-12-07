@@ -1,148 +1,137 @@
 <?php
 
-
 namespace atk4\LaravelAD\tests;
 
-
 use atk4\data\Persistence;
+use atk4\dsql\Query;
 use atk4\LaravelAD\AgileDataServiceProvider;
 use atk4\schema\Migration;
 use Orchestra\Testbench\TestCase;
-use atk4\dsql\Query;
 
-class User extends \atk4\data\Model {
-	public $table = 'user';
+class User extends \atk4\data\Model
+{
+    public $table = 'user';
 
-	public function init()
-	{
-		parent::init();
+    public function init()
+    {
+        parent::init();
 
-		$this->addField('name');
-		$this->addField('surname');
-	}
+        $this->addField('name');
+        $this->addField('surname');
+    }
 }
 
-class LaravelIntegrationTest extends TestCase {
+class LaravelIntegrationTest extends TestCase
+{
+    protected function getPackageProviders($app)
+    {
+        return [AgileDataServiceProvider::class];
+    }
 
-	protected function getPackageProviders($app)
-	{
-		return [AgileDataServiceProvider::class];
-	}
+    /**
+     * Define environment setup.
+     *
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver'   => 'sqlite',
+            'database' => ':memory:',
+            'prefix'   => '',
+        ]);
+        $app['config']->set('agiledata.connection', 'default');
+    }
 
-	/**
-	 * Define environment setup.
-	 *
-	 * @param  \Illuminate\Foundation\Application $app
-	 *
-	 * @return void
-	 */
-	protected function getEnvironmentSetUp($app)
-	{
-		// Setup default database to use sqlite :memory:
-		$app['config']->set('database.default', 'testbench');
-		$app['config']->set('database.connections.testbench', [
-			'driver'   => 'sqlite',
-			'database' => ':memory:',
-			'prefix'   => '',
-		]);
-		$app['config']->set('agiledata.connection', 'default');
-	}
+    public function testDILoaded()
+    {
+        $db = $this->app->make('agiledata');
 
-	public function testDILoaded()
-	{
-		$db = $this->app->make('agiledata');
+        $this->assertInstanceOf(Persistence::class, $db);
+    }
 
-		$this->assertInstanceOf(Persistence::class, $db);
-	}
+    public function testDIAliasLoaded()
+    {
+        $db = $this->app->make(Persistence::class);
 
-	public function testDIAliasLoaded()
-	{
-		$db = $this->app->make(Persistence::class);
+        $this->assertInstanceOf(Persistence::class, $db);
+    }
 
-		$this->assertInstanceOf(Persistence::class, $db);
-	}
+    public function testPersistenceSanityCheck()
+    {
+        $db = $this->app->make('agiledata');
 
-	public function testPersistenceSanityCheck()
-	{
+        $q = [
+            'user' => [
+                ['name' => 'Vinny', 'surname' => 'Shira'],
+                ['name' => 'Zoe', 'surname' => 'Shatwell'],
+            ],
+        ];
 
-		$db = $this->app->make('agiledata');
+        $this->setDB($q, $db);
 
-		$q = [
-			'user' => [
-				['name' => 'Vinny', 'surname' => 'Shira'],
-				['name' => 'Zoe', 'surname' => 'Shatwell'],
-			],
-		];
+        $m = new User($db);
 
-		$this->setDB($q, $db);
+        $m->set(['name' => 'John', 'surname' => 'Smith']);
+        $m->save();
 
-		$m = new User($db);
+        $m->load(3);
+        $user = $m->get();
+        $this->assertEquals('John', $user['name']);
+    }
 
-		$m->set(['name' => 'John', 'surname' => 'Smith']);
-		$m->save();
+    protected function setDB($db_data, $db)
+    {
+        $this->tables = array_keys($db_data);
 
-		$m->load(3);
-		$user = $m->get();
-		$this->assertEquals('John', $user['name']);
-	}
+        // create databases
+        foreach ($db_data as $table => $data) {
+            $s = new Migration(['connection' => $db->connection]);
+            $s->table($table)->drop();
 
-	protected function setDB($db_data, $db)
-	{
-		$this->tables = array_keys($db_data);
+            $first_row = current($data);
 
-		// create databases
-		foreach ($db_data as $table => $data)
-		{
-			$s = new Migration(['connection' => $db->connection]);
-			$s->table($table)->drop();
+            foreach ($first_row as $field => $row) {
+                if ($field === 'id') {
+                    $s->id('id');
+                    continue;
+                }
 
-			$first_row = current($data);
+                if (is_int($row)) {
+                    $s->field($field, ['type' => 'integer']);
+                    continue;
+                }
 
-			foreach ($first_row as $field => $row)
-			{
-				if ($field === 'id')
-				{
-					$s->id('id');
-					continue;
-				}
+                $s->field($field);
+            }
 
-				if (is_int($row))
-				{
-					$s->field($field, ['type' => 'integer']);
-					continue;
-				}
+            if (!isset($first_row['id'])) {
+                $s->id();
+            }
 
-				$s->field($field);
-			}
+            $s->create();
 
-			if (!isset($first_row['id']))
-			{
-				$s->id();
-			}
+            $has_id = (bool) key($data);
 
-			$s->create();
+            foreach ($data as $id => $row) {
+                $s = new Query(['connection' => $db->connection]);
+                if ($id === '_') {
+                    continue;
+                }
 
-			$has_id = (bool) key($data);
+                $s->table($table);
+                $s->set($row);
 
-			foreach ($data as $id => $row)
-			{
-				$s = new Query(['connection' => $db->connection]);
-				if ($id === '_')
-				{
-					continue;
-				}
+                if (!isset($row['id']) && $has_id) {
+                    $s->set('id', $id);
+                }
 
-				$s->table($table);
-				$s->set($row);
-
-				if (!isset($row['id']) && $has_id)
-				{
-					$s->set('id', $id);
-				}
-
-				$s->insert();
-			}
-		}
-	}
-
+                $s->insert();
+            }
+        }
+    }
 }
