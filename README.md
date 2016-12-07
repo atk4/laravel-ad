@@ -1,4 +1,6 @@
-A drop-in integration for [Laravel 5+](http://laravel.com) to allow use of [Agile Data](http://git.io/ad) natively.
+# Laravel Agile Data
+
+*A drop-in integration for Laravel 5+ to allow use of Agile Data natively.*
 
 
 [![Build Status](https://travis-ci.org/atk4/laravel-ad.png?branch=develop)](https://travis-ci.org/atk4/laravel-ad)
@@ -8,18 +10,64 @@ A drop-in integration for [Laravel 5+](http://laravel.com) to allow use of [Agil
 [![codecov](https://codecov.io/gh/atk4/laravel-ad/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/laravel-ad)
 [![Version](https://badge.fury.io/gh/atk4%2Flaravel-ad.svg)](https://packagist.org/packages/atk4/laravel-ad)
 
-``` php
-example
+
+## Installation
+
+First install via composer
+
+```php
+composer require "atk4/laravel-ad"
 ```
+
+Next, add the ServiceProvider to the providers array in `config/app.php`
+
+```php
+at4k\LaravelAD\AgileDataServiceProvider::class
+```
+
+Finally, publish the configuration file by running the command:
+
+```php
+php artisan vendor:publish --tag="agiledata"
+```
+
+## Configuration
+
+Without any additional configuration LaravelAD will use the default connection specified in your `config/database.php` configuration.
+
+To use a different connection simply specify the connection name in `config/agiledata.php`.
+
+## Usage
+
+There are two ways to get an instance of `atk4\data\Persistence` which follow the normal behavior of [resolving](https://laravel.com/docs/5.1/container#resolving) a dependency in Laravel.
+
+Through a type-hint in any class that is resolved through the service container:
+
+```php
+use Illuminate\Routing\Controller;
+
+class MyController extends Controller 
+{
+    public function __construct(atk4\data\Persistence $db) 
+    {
+        
+    }
+}
+```
+
+or by resolving directly through the service container
+
+```php
+$db = $this->app->make('agiledata'); // using the alias
+$db = $this->app->make(atk4\data\Persistence::class); // using the class name
+```
+
 
 ## Roadmap
 
-Essential: (absolutely needed)
-* [ServiceProvider](https://laravel.com/docs/master/providers) -- This is the entry point for registering *any* third-party library with laravel. 
-* [Registering AD with the DI container](https://laravel.com/docs/master/container) -- Wiring up AD. At the bare minimum there would need to be a binding that resolved `return \atk4\data\Persistence::connect(PDO_DSN, USER, PASS);` so the user can get a `$db` instance
-  Important: (if you want to make it easier for migrating from Eloquent)
-* [Migration console commands](https://laravel.com/docs/master/migrations) -- Eloquent provides console commands that let a user migrate up/down based on model changes. I know AD already has an extension for this so it would just be a matter of writing the commands to use AD
-* [Auth](https://laravel.com/docs/master/authentication#adding-custom-user-providers) -- Need to write a user provider so that laravel's built in auth can get and verify a user
-  Nice To Have:
-* [Validation that uses DB](https://laravel.com/docs/5.3/validation#available-validation-rules) -- A couple route validation methods access the database (exists, unique). These would need to be overridden with custom validators (in the ServiceProvider)
-* [Collections](https://laravel.com/docs/5.3/collections) -- This might be better for the **Important** category but i don't know how much they are used. Any set of entities loaded from Eloquent are a `Collection`. They support a bunch of in memory functional methods like `pluck, map, etc.`. Having a model init with their many relationships loaded as a laravel `Collection` would definitely help people who rely heavily on them already.
+ - [x] DI integration
+ - [ ] Facade for retrieving different `Persistence` objects
+ - [ ] Authentication UserProvider
+ - [ ] Migrations using Console
+ - [ ] Support route validations that use DB
+ - [ ] Support Laravel Collections?
