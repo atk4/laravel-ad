@@ -35,7 +35,7 @@
   },
   "autoload": {
     "psr-4": {
-      "LaravelAD\\ORM\\": "src/"
+      "atk4\\LaravelAD\\": "src/"
     }
   },
   "autoload-dev": {

@@ -1,5 +1,12 @@
 A drop-in integration for [Laravel 5+](http://laravel.com) to allow use of [Agile Data](http://git.io/ad) natively.
 
+
+[![Build Status](https://travis-ci.org/atk4/laravel-ad.png?branch=develop)](https://travis-ci.org/atk4/laravel-ad)
+[![Code Climate](https://codeclimate.com/github/atk4/laravel-ad/badges/gpa.svg)](https://codeclimate.com/github/atk4/laravel-ad)
+[![StyleCI](https://styleci.io/repos/56442737/shield)](https://styleci.io/repos/56442737)
+[![Test Coverage](https://codeclimate.com/github/atk4/laravel-ad/badges/coverage.svg)](https://codeclimate.com/github/atk4/laravel-ad/coverage)
+[![Version](https://badge.fury.io/gh/atk4%2Flaravel-ad.svg)](https://packagist.org/packages/atk4/laravel-ad)
+
 ``` php
 example
 ```
