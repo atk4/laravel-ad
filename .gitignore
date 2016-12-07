@@ -4,3 +4,5 @@ docs/build
 /vendor
 .DS_Store
 *.codekit*
+/.idea
+*.iml
