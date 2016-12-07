@@ -1,11 +1,13 @@
 <?php
+
 namespace atk4\LaravelAD;
 
-class Test {
+class Test
+{
+    public function test()
+    {
+        echo 'not testing yet';
 
-    function test() {
-        echo "not testing yet";
-
-        echo "extra line to annoy code-coverage";
+        echo 'extra line to annoy code-coverage';
     }
 }

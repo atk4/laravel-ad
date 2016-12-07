@@ -1,12 +1,11 @@
 <?php
 
 
-use atk4\data\Model;
-
-class User extends \atk4\data\Model {
+class User extends \atk4\data\Model
+{
     public $table = 'user';
 
-    function init()
+    public function init()
     {
         parent::init();
 
@@ -16,14 +15,12 @@ class User extends \atk4\data\Model {
 }
 
 /**
- * Tests basic create, update and delete operatiotns
+ * Tests basic create, update and delete operatiotns.
  */
 class CRUDTest extends \atk4\schema\PHPUnit_SchemaTestCase
 {
-
     public function testUpdate()
     {
-
         $q = [
             'user' => [
                 ['name' => 'Vinny', 'surname' => 'Shira'],
@@ -49,7 +46,6 @@ class CRUDTest extends \atk4\schema\PHPUnit_SchemaTestCase
 
     public function testAddDelete()
     {
-
         $q = [
             'user' => [
                 ['name' => 'Jason', 'surname' => 'Dyck'],
@@ -65,7 +61,7 @@ class CRUDTest extends \atk4\schema\PHPUnit_SchemaTestCase
 
         //$m->save(['name'=>'Robert']);
 
-        $m->loadBy('name', 'Jason');//->delete();
+        $m->loadBy('name', 'Jason'); //->delete();
 
         $this->assertEquals('Dyck', $m['surname']);
     }

@@ -2,7 +2,7 @@
 
 namespace atk4\LaravelAD\tests;
 
-class BasicTest extends \atk4\core\PHPUnit_AgileTestCase
+class DummyTest extends \atk4\core\PHPUnit_AgileTestCase
 {
     /**
      * Test constructor.
@@ -11,5 +11,4 @@ class BasicTest extends \atk4\core\PHPUnit_AgileTestCase
     {
         $this->assertEquals('foo', 'foo');
     }
-
 }
