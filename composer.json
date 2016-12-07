@@ -36,10 +36,7 @@
   "autoload": {
     "psr-4": {
       "LaravelAD\\ORM\\": "src/"
-    },
-    "files": [
-      "src/helpers.php"
-    ]
+    }
   },
   "autoload-dev": {
     "classmap": [
