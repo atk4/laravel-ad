@@ -41,7 +41,7 @@ class AgileDataServiceProvider extends ServiceProvider
                 case 'sqlite':
                     $dsn .= "{$connectionDetails['database']}";
                     break;
-	            default:
+                default:
                     throw new \Exception('Driver must mysql or sqlite');
             }
 
