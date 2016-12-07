@@ -40,6 +40,9 @@ class AgileDataServiceProvider extends ServiceProvider
                     break;
                 case 'sqlite':
                     $dsn .= "{$connectionDetails['database']}";
+                    break;
+	            default:
+                    throw new \Exception('Driver must mysql or sqlite');
             }
 
             return Persistence::connect($dsn, ArrayUtil::get($connectionDetails['username']), ArrayUtil::get($connectionDetails['password']));
