@@ -5,6 +5,7 @@ A drop-in integration for [Laravel 5+](http://laravel.com) to allow use of [Agil
 [![Code Climate](https://codeclimate.com/github/atk4/laravel-ad/badges/gpa.svg)](https://codeclimate.com/github/atk4/laravel-ad)
 [![StyleCI](https://styleci.io/repos/56442737/shield)](https://styleci.io/repos/56442737)
 [![Test Coverage](https://codeclimate.com/github/atk4/laravel-ad/badges/coverage.svg)](https://codeclimate.com/github/atk4/laravel-ad/coverage)
+[![codecov](https://codecov.io/gh/atk4/laravel-ad/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/laravel-ad)
 [![Version](https://badge.fury.io/gh/atk4%2Flaravel-ad.svg)](https://packagist.org/packages/atk4/laravel-ad)
 
 ``` php
