@@ -3,7 +3,6 @@
 namespace atk4\LaravelAD;
 
 use atk4\data\Persistence;
-use FoxxMD\Utilities\ArrayUtil;
 use Illuminate\Support\ServiceProvider;
 
 class AgileDataServiceProvider extends ServiceProvider
