@@ -44,7 +44,7 @@ class AgileDataServiceProvider extends ServiceProvider
                     throw new \Exception('Driver must mysql or sqlite');
             }
 
-            return Persistence::connect($dsn, Arr::get($connectionDetails,'username'), Arr::get($connectionDetails,'password'));
+            return Persistence::connect($dsn, Arr::get($connectionDetails, 'username'), Arr::get($connectionDetails, 'password'));
         });
 
         $this->app->alias('agiledata', Persistence::class);
