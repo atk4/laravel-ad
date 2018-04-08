@@ -24,7 +24,6 @@
     "illuminate/contracts": ">=5.1",
     "illuminate/support": ">=5.1",
     "illuminate/validation": ">=5.1",
-    "foxxmd/php-utilities": "dev-master",
     "orchestra/testbench": "~3.1"
   },
   "require-dev": {
