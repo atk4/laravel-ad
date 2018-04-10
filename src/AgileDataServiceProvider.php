@@ -3,8 +3,8 @@
 namespace atk4\LaravelAD;
 
 use atk4\data\Persistence;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Arr;
+use Illuminate\Support\ServiceProvider;
 
 class AgileDataServiceProvider extends ServiceProvider
 {
@@ -37,8 +37,8 @@ class AgileDataServiceProvider extends ServiceProvider
             switch ($connectionDetails['driver']) {
                 case 'mysql':
                     $dsn .= "host={$connectionDetails['host']};dbname={$connectionDetails['database']}";
-                    if(!empty($connectionDetails['port'])){
-                        $dsn .= ";port=" . $connectionDetails['port'];
+                    if (!empty($connectionDetails['port'])) {
+                        $dsn .= ';port='.$connectionDetails['port'];
                     }
                     break;
                 case 'sqlite':
