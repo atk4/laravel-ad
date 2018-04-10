@@ -37,6 +37,9 @@ class AgileDataServiceProvider extends ServiceProvider
             switch ($connectionDetails['driver']) {
                 case 'mysql':
                     $dsn .= "host={$connectionDetails['host']};dbname={$connectionDetails['database']}";
+                    if(!empty($connectionDetails['port'])){
+                        $dsn .= ";port=" . $connectionDetails['port'];
+                    }
                     break;
                 case 'sqlite':
                     $dsn .= "{$connectionDetails['database']}";
