@@ -11,7 +11,7 @@ class AgileDataServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/agiledata.php' => config_path('agiledata.php'),
+            __DIR__ . '/agiledata.php' => config_path('agiledata.php'),
         ], 'agiledata');
     }
 
@@ -32,7 +32,7 @@ class AgileDataServiceProvider extends ServiceProvider
             if ('default' === $connectionName = $config->get('agiledata.connection')) {
                 $connectionName = $config->get('database.default');
             }
-            $connectionDetails = $config->get('database.connections.'.$connectionName);
+            $connectionDetails = $config->get('database.connections.' . $connectionName);
             $dsn = "{$connectionDetails['driver']}:";
             switch ($connectionDetails['driver']) {
                 case 'mysql':
