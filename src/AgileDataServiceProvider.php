@@ -3,7 +3,7 @@
 namespace atk4\LaravelAD;
 
 use atk4\data\Persistence;
-use FoxxMD\Utilities\ArrayUtil;
+use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
 
 class AgileDataServiceProvider extends ServiceProvider
@@ -37,6 +37,9 @@ class AgileDataServiceProvider extends ServiceProvider
             switch ($connectionDetails['driver']) {
                 case 'mysql':
                     $dsn .= "host={$connectionDetails['host']};dbname={$connectionDetails['database']}";
+                    if (!empty($connectionDetails['port'])) {
+                        $dsn .= ';port='.$connectionDetails['port'];
+                    }
                     break;
                 case 'sqlite':
                     $dsn .= "{$connectionDetails['database']}";
@@ -45,7 +48,7 @@ class AgileDataServiceProvider extends ServiceProvider
                     throw new \Exception('Driver must mysql or sqlite');
             }
 
-            return Persistence::connect($dsn, ArrayUtil::get($connectionDetails['username']), ArrayUtil::get($connectionDetails['password']));
+            return Persistence::connect($dsn, Arr::get($connectionDetails, 'username'), Arr::get($connectionDetails, 'password'));
         });
 
         $this->app->alias('agiledata', Persistence::class);
